@@ -3,64 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Votes - Album de Promo Lycée Maurice Rondeau</title>
+    <title>Votes - Album de Promo | Lycée Maurice Rondeau</title>
     <style>
-        :root { --primary: #2563eb; --bg: #f8fafc; --text: #1e293b; --card: #ffffff; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 700px; margin: 0 auto; }
-        h1 { text-align: center; color: var(--primary); font-size: 1.8rem; margin-bottom: 5px; }
-        p.subtitle { text-align: center; color: #64748b; margin-bottom: 30px; }
-        .card { background: var(--card); border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .category-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem; }
-        select, input[type="text"] { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 1rem; margin-bottom: 15px; background-color: #f8fafc; transition: border-color 0.2s; box-sizing: border-box; }
-        select:focus, input[type="text"]:focus { outline: none; border-color: var(--primary); }
-        select:disabled { opacity: 0.5; cursor: not-allowed; }
-        .submit-btn { width: 100%; background-color: var(--primary); color: white; border: none; padding: 15px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
-        .submit-btn:hover { background-color: #1d4ed8; }
-        .loader { display: none; text-align: center; font-weight: bold; color: var(--primary); margin-top: 15px; }
-        #success-message { display: none; text-align: center; background: #dcfce7; color: #166534; padding: 30px; border-radius: 12px; margin-top: 50px; }
+        /* Design moderne et épuré */
+        :root { --primary-color: #3b82f6; --bg-color: #f1f5f9; --card-bg: #ffffff; --text-main: #1e293b; --text-muted: #64748b; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px 10px; line-height: 1.5; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 28px; color: var(--primary-color); margin: 0 0 5px 0; }
+        .header p { color: var(--text-muted); margin: 0; font-size: 15px; }
+        .card { background-color: var(--card-bg); border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05); }
+        .category-title { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; }
+        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #475569; }
+        input[type="text"], select { width: 100%; padding: 12px 16px; margin-bottom: 16px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; background-color: #f8fafc; transition: all 0.2s; box-sizing: border-box; }
+        input[type="text"]:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); background-color: #fff; }
+        select:disabled { opacity: 0.6; cursor: not-allowed; }
+        button { width: 100%; background-color: var(--primary-color); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2); }
+        button:hover { background-color: #2563eb; }
+        button:disabled { background-color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+        .loader { display: none; text-align: center; color: var(--primary-color); font-weight: 600; margin-top: 15px; }
+        #success-message { display: none; text-align: center; background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; padding: 40px 20px; border-radius: 16px; margin-top: 40px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        #success-message h2 { margin-top: 0; font-size: 24px; }
     </style>
 </head>
 <body>
 
 <div class="container" id="main-container">
-    <h1>🏆 Cérémonie des Diplômes</h1>
-    <p class="subtitle">Album de Promo - Lycée Maurice Rondeau</p>
+    <div class="header">
+        <h1>🏆 Diplômes de Fin d'Année</h1>
+        <p>Album de Promo - Lycée Maurice Rondeau</p>
+    </div>
 
     <form id="voteForm">
         <div class="card">
-            <label for="votantName">Ton Prénom et Nom (1 vote par personne) :</label>
+            <div class="category-title">👤 Ton identité</div>
+            <label for="votantName">Prénom et Nom (1 seul vote par personne) :</label>
             <input type="text" id="votantName" placeholder="Ex: Jean Dupont" required>
         </div>
 
-        <div id="categories-container">
-            </div>
+        <div id="dynamic-categories"></div>
 
         <div class="card">
-            <div class="category-title">Question ouverte</div>
+            <div class="category-title">👨‍🏫 Question spéciale</div>
             <label for="profMarquant">Le prof qui vous a le plus marqué :</label>
             <input type="text" id="profMarquant" placeholder="Nom du professeur" required>
         </div>
 
-        <button type="submit" class="submit-btn" id="submitBtn">Envoyer mes votes définitivement</button>
-        <div class="loader" id="loader">Envoi en cours... Veuillez patienter.</div>
+        <button type="submit" id="submitBtn">Envoyer mes votes définitivement</button>
+        <div class="loader" id="loader">Envoi en cours... Ne quitte pas la page ⏳</div>
     </form>
 </div>
 
 <div class="container" id="success-message">
-    <h2>🎉 Votes enregistrés !</h2>
-    <p>Merci pour ta participation. Tu ne peux voter qu'une seule fois.</p>
+    <h2>🎉 C'est dans la boîte !</h2>
+    <p>Tes votes ont bien été enregistrés pour l'album de promo.</p>
+    <p>Merci pour ta participation !</p>
 </div>
 
 <script>
-    // Vérification : L'utilisateur a-t-il déjà voté sur cet appareil ?
+    // 1. Vérifier si l'élève a déjà voté
     if (localStorage.getItem('aVoteDiplomes') === 'oui') {
         document.getElementById('main-container').style.display = 'none';
         document.getElementById('success-message').style.display = 'block';
     }
 
-    // --- BASE DE DONNÉES DES ÉLÈVES ---
+    // 2. Base de données complète des élèves
     const annuaire = {
         "TERM ST-COLOMBAN": ["Michael A", "Juliette C", "Naoufel D", "Noé D", "Louis D", "Alexis F", "Lucas K", "Sohane K", "Noura L", "Alexis L", "Liléa M", "Alexandre M", "Célia M", "Sandali M", "Elisabeth R", "Neïssa S", "Gabriel T", "Aliénor V"],
         "TMCVA1": ["Rose F", "Nicole G", "Khadija K", "Maïwen L", "Julien L"],
@@ -75,10 +82,10 @@
         "Terminale E": ["Nanda A", "Inès A", "Siobhan A", "Eryn B", "Anaëlle B", "Manon B", "Baptiste B", "Rémi B", "Ghali C", "Raphaël D", "Ziad E", "Alice F", "Lucie G", "Marie H", "Abigael J", "Anaïa J", "Johnny K", "Claire L", "Noa L", "Cléo L", "Noa M", "Darryl M", "Anas M", "Ilyes M", "Noé P", "Elena P", "Charline R", "Sixtine R", "Marie S", "Léna S", "Louise T", "Anthony T", "Julien W"]
     };
 
-    // --- CATÉGORIES ---
+    // 3. Liste des diplômes
     const categories = [
         "La personne qui vous a fait le plus rire",
-        "La personne la plus solaire",
+        "La personne la plus solaire (joyeuse, donne envie de sourire, etc...)",
         "La personne qui a le plus de répartie",
         "La personne qui est la plus sportive (fille)",
         "La personne la plus sportive (garçon)",
@@ -92,41 +99,40 @@
         "La personne la plus en retard"
     ];
 
-    const container = document.getElementById("categories-container");
+    // 4. Génération automatique de l'interface
+    const container = document.getElementById("dynamic-categories");
+    
+    // Préparer les options de classes une seule fois
+    let optionsClasses = `<option value="">-- Choisir la classe --</option>`;
+    for (let classe in annuaire) {
+        optionsClasses += `<option value="${classe}">${classe}</option>`;
+    }
 
-    // --- GÉNÉRATION DYNAMIQUE DU FORMULAIRE ---
     categories.forEach((cat, index) => {
         const idClasse = `classe_${index}`;
         const idEleve = `eleve_${index}`;
 
-        // Construire les options des classes
-        let optionsClasses = `<option value="">-- Choisir la classe --</option>`;
-        for (let classe in annuaire) {
-            optionsClasses += `<option value="${classe}">${classe}</option>`;
-        }
-
-        const html = `
+        const htmlBlock = `
             <div class="card">
-                <div class="category-title">${cat}</div>
-                <label>1. Dans quelle classe est la personne ?</label>
+                <div class="category-title">🏅 ${cat}</div>
+                <label>1. Classe :</label>
                 <select id="${idClasse}" required>
                     ${optionsClasses}
                 </select>
-
-                <label>2. Qui est-ce ?</label>
+                <label>2. Élève :</label>
                 <select id="${idEleve}" required disabled>
                     <option value="">-- Sélectionner d'abord la classe --</option>
                 </select>
             </div>
         `;
-        container.insertAdjacentHTML('beforeend', html);
+        // Ajouter le bloc au HTML
+        container.insertAdjacentHTML('beforeend', htmlBlock);
 
-        // Ajouter la logique pour ce bloc spécifique
-        const selectClasse = document.getElementById(idClasse);
-        const selectEleve = document.getElementById(idEleve);
-
-        selectClasse.addEventListener("change", function() {
+        // Activer la logique : Quand on choisit une classe, on remplit les élèves
+        document.getElementById(idClasse).addEventListener("change", function() {
             const classeChoisie = this.value;
+            const selectEleve = document.getElementById(idEleve);
+            
             selectEleve.innerHTML = '<option value="">-- Choisir un élève --</option>';
             
             if (classeChoisie) {
@@ -140,15 +146,18 @@
         });
     });
 
-    // --- ENVOI DES DONNÉES VERS GOOGLE SHEETS ---
+    // 5. Envoi des données vers Google Sheets
     document.getElementById("voteForm").addEventListener("submit", function(e) {
-        e.preventDefault();
+        e.preventDefault(); // Empêche le rechargement de la page
         
-        // Cacher le bouton, afficher le chargement
-        document.getElementById("submitBtn").style.display = "none";
-        document.getElementById("loader").style.display = "block";
+        const btn = document.getElementById("submitBtn");
+        const loader = document.getElementById("loader");
+        
+        btn.disabled = true;
+        btn.style.display = "none";
+        loader.style.display = "block";
 
-        // Récolter les réponses
+        // Construction du colis de données
         let payload = {
             votant: document.getElementById("votantName").value,
             prof: document.getElementById("profMarquant").value,
@@ -159,26 +168,24 @@
             payload.votes[cat] = document.getElementById(`eleve_${index}`).value;
         });
 
-        // REMPLACE CETTE URL PAR CELLE OBTENUE À L'ÉTAPE 1 DANS GOOGLE SCRIPT !!!
+        // TON LIEN OFFICIEL EST ICI
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCjdw8NnaA-QvFR_QQRG8bjyCVEXN8sygjR9En_bAq6fcYZnPy8uMuvzBjPT_BBkoy/exec";
 
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors', // Évite les erreurs de sécurité du navigateur
+            mode: 'no-cors', 
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         }).then(() => {
-            // Sauvegarder dans le navigateur que la personne a voté
             localStorage.setItem('aVoteDiplomes', 'oui');
-            
-            // Afficher le message de succès
             document.getElementById('main-container').style.display = 'none';
             document.getElementById('success-message').style.display = 'block';
-            window.scrollTo(0, 0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }).catch(err => {
-            alert("Une erreur est survenue lors de l'envoi. Réessaie !");
-            document.getElementById("submitBtn").style.display = "block";
-            document.getElementById("loader").style.display = "none";
+            alert("Une erreur de connexion est survenue. Vérifie ton réseau et réessaie !");
+            btn.disabled = false;
+            btn.style.display = "block";
+            loader.style.display = "none";
         });
     });
 </script>
