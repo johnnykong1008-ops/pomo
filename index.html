@@ -172,10 +172,23 @@
             localStorage.setItem('aVoteDiplomes', 'oui');
             
             // Afficher le message de succès
+            // REMPLACE CETTE URL PAR CELLE OBTENUE À L'ÉTAPE 1 DANS GOOGLE SCRIPT !!!
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCjdw8NnaA-QvFR_QQRG8bjyCVEXN8sygjR9En_bAq6fcYZnPy8uMuvzBjPT_BBkoy/exec";
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).then(() => {
+            // Sauvegarder dans le navigateur que la personne a voté
+            localStorage.setItem('aVoteDiplomes', 'oui');
+            
+            // Afficher le message de succès
             document.getElementById('main-container').style.display = 'none';
             document.getElementById('success-message').style.display = 'block';
             window.scrollTo(0, 0);
-        }).catch(err => {https://script.google.com/macros/s/AKfycbwCjdw8NnaA-QvFR_QQRG8bjyCVEXN8sygjR9En_bAq6fcYZnPy8uMuvzBjPT_BBkoy/exec
+        }).catch(err => {
             alert("Une erreur est survenue lors de l'envoi. Réessaie !");
             document.getElementById("submitBtn").style.display = "block";
             document.getElementById("loader").style.display = "none";
