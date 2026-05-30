@@ -160,24 +160,11 @@
         });
 
         // REMPLACE CETTE URL PAR CELLE OBTENUE À L'ÉTAPE 1 DANS GOOGLE SCRIPT !!!
-        const GOOGLE_SCRIPT_URL = "URL_DE_TON_SCRIPT_GOOGLE_ICI";
-
-        fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors', // Évite les erreurs de sécurité du navigateur
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).then(() => {
-            // Sauvegarder dans le navigateur que la personne a voté
-            localStorage.setItem('aVoteDiplomes', 'oui');
-            
-            // Afficher le message de succès
-            // REMPLACE CETTE URL PAR CELLE OBTENUE À L'ÉTAPE 1 DANS GOOGLE SCRIPT !!!
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwCjdw8NnaA-QvFR_QQRG8bjyCVEXN8sygjR9En_bAq6fcYZnPy8uMuvzBjPT_BBkoy/exec";
 
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors', 
+            mode: 'no-cors', // Évite les erreurs de sécurité du navigateur
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         }).then(() => {
