@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votes - Album de Promo Lycée Maurice Rondeau</title>
+    <style>
+        :root { --primary: #2563eb; --bg: #f8fafc; --text: #1e293b; --card: #ffffff; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; }
+        h1 { text-align: center; color: var(--primary); font-size: 1.8rem; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #64748b; margin-bottom: 30px; }
+        .card { background: var(--card); border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .category-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem; }
+        select, input[type="text"] { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 1rem; margin-bottom: 15px; background-color: #f8fafc; transition: border-color 0.2s; box-sizing: border-box; }
+        select:focus, input[type="text"]:focus { outline: none; border-color: var(--primary); }
+        select:disabled { opacity: 0.5; cursor: not-allowed; }
+        .submit-btn { width: 100%; background-color: var(--primary); color: white; border: none; padding: 15px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
+        .submit-btn:hover { background-color: #1d4ed8; }
+        .loader { display: none; text-align: center; font-weight: bold; color: var(--primary); margin-top: 15px; }
+        #success-message { display: none; text-align: center; background: #dcfce7; color: #166534; padding: 30px; border-radius: 12px; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="main-container">
+    <h1>🏆 Cérémonie des Diplômes</h1>
+    <p class="subtitle">Album de Promo - Lycée Maurice Rondeau</p>
+
+    <form id="voteForm">
+        <div class="card">
+            <label for="votantName">Ton Prénom et Nom (1 vote par personne) :</label>
+            <input type="text" id="votantName" placeholder="Ex: Jean Dupont" required>
+        </div>
+
+        <div id="categories-container">
+            </div>
+
+        <div class="card">
+            <div class="category-title">Question ouverte</div>
+            <label for="profMarquant">Le prof qui vous a le plus marqué :</label>
+            <input type="text" id="profMarquant" placeholder="Nom du professeur" required>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">Envoyer mes votes définitivement</button>
+        <div class="loader" id="loader">Envoi en cours... Veuillez patienter.</div>
+    </form>
+</div>
+
+<div class="container" id="success-message">
+    <h2>🎉 Votes enregistrés !</h2>
+    <p>Merci pour ta participation. Tu ne peux voter qu'une seule fois.</p>
+</div>
+
+<script>
+    // Vérification : L'utilisateur a-t-il déjà voté sur cet appareil ?
+    if (localStorage.getItem('aVoteDiplomes') === 'oui') {
+        document.getElementById('main-container').style.display = 'none';
+        document.getElementById('success-message').style.display = 'block';
+    }
+
+    // --- BASE DE DONNÉES DES ÉLÈVES ---
+    const annuaire = {
+        "TERM ST-COLOMBAN": ["Michael A", "Juliette C", "Naoufel D", "Noé D", "Louis D", "Alexis F", "Lucas K", "Sohane K", "Noura L", "Alexis L", "Liléa M", "Alexandre M", "Célia M", "Sandali M", "Elisabeth R", "Neïssa S", "Gabriel T", "Aliénor V"],
+        "TMCVA1": ["Rose F", "Nicole G", "Khadija K", "Maïwen L", "Julien L"],
+        "TMCVA2": ["Léa B", "Andrea C", "Hugo C", "Louka D", "Noémie I", "Jade M", "Sanela S"],
+        "TMCVB": ["Sophia K", "Chloé T", "Mathilde Q"],
+        "TMSPC": ["Clément D"],
+        "TST2D": ["Romain B", "Nathan C", "Naël J", "Clément M", "Yoan P"],
+        "Terminale A": ["Loucine A", "Youssef A", "Alix B", "Noémie B", "Neyla B", "Quentin B", "Camille B", "Etienne B", "Loïc B", "Léo B", "Clara B", "Sienna B", "Flora B", "Martin B", "Sylia B", "Anna C", "Adryen D", "Louis G", "Benjamin G", "Nayanka I", "Badis K", "Unice K", "Raphaël L", "Nicolas L", "Loreine L", "Paul M", "Charlie N", "Sofia P", "Mathilde P", "Emilie P", "Sacha P", "Tom R", "Noé S"],
+        "Terminale B": ["Giulia A", "Sophia A", "Pierre-Alexandre A", "Maély B", "Mathieu B", "Nathan B", "Kyllian C", "Séléna C", "Rania D", "Victor D", "Calder D", "Yasmine E", "Nerea F", "Mathis G", "Dorian G", "Antoine G", "Yacine H", "Manon H", "Maëlys H", "Minjou K", "Phoebe L", "Merry N", "Eya O", "Delphine R", "Lanna S", "Jaizha S", "Robin T"],
+        "Terminale C": ["Ethan B", "Lucie B", "Nadia C", "Eliott C", "Lauriane C", "Noé C", "James C", "Chada C", "Naomi C", "Zachary D", "Timéo D", "Elisa D", "Charley E", "Chiara G", "Ayoub G", "Cathy H", "Manel K", "Noémie L", "Henoc L", "Léo M", "Matteo M", "Titouan M", "Yanis N", "Bilel O", "Randiana R", "Aliya R", "Syrielle S", "Dylan T", "Kim-Ly T", "Ethan T", "Cléo V", "Luka Z"],
+        "Terminale D": ["Margaux A", "Solenn B", "Pauline B", "Arthur C", "Keoni C", "Louane C", "Valentin C", "Sovantévy C", "Thomas D", "Marion D", "Anaïs F", "Manon G", "Lucas G", "Sorya H", "Coryavotey K", "Mayana L", "Thibault L", "Théo M", "Elsa M", "Pierre M", "Lucille P", "Sarah S", "Alejandro S", "Maylina S", "Margot T", "Stella T", "Lucas V", "Aymeric W"],
+        "Terminale E": ["Nanda A", "Inès A", "Siobhan A", "Eryn B", "Anaëlle B", "Manon B", "Baptiste B", "Rémi B", "Ghali C", "Raphaël D", "Ziad E", "Alice F", "Lucie G", "Marie H", "Abigael J", "Anaïa J", "Johnny K", "Claire L", "Noa L", "Cléo L", "Noa M", "Darryl M", "Anas M", "Ilyes M", "Noé P", "Elena P", "Charline R", "Sixtine R", "Marie S", "Léna S", "Louise T", "Anthony T", "Julien W"]
+    };
+
+    // --- CATÉGORIES ---
+    const categories = [
+        "La personne qui vous a fait le plus rire",
+        "La personne la plus solaire",
+        "La personne qui a le plus de répartie",
+        "La personne qui est la plus sportive (fille)",
+        "La personne la plus sportive (garçon)",
+        "La personne qui sait tous les gossip du lycée",
+        "La personne qui a le plus de fun fact",
+        "Le/La meilleur(e) musicien(ne)",
+        "Le plus nonchalant",
+        "La personne qui a le rire le plus contagieux",
+        "La personne qui a le plus la tête dans les nuages",
+        "La personne qui a le style le plus original",
+        "La personne la plus en retard"
+    ];
+
+    const container = document.getElementById("categories-container");
+
+    // --- GÉNÉRATION DYNAMIQUE DU FORMULAIRE ---
+    categories.forEach((cat, index) => {
+        const idClasse = `classe_${index}`;
+        const idEleve = `eleve_${index}`;
+
+        // Construire les options des classes
+        let optionsClasses = `<option value="">-- Choisir la classe --</option>`;
+        for (let classe in annuaire) {
+            optionsClasses += `<option value="${classe}">${classe}</option>`;
+        }
+
+        const html = `
+            <div class="card">
+                <div class="category-title">${cat}</div>
+                <label>1. Dans quelle classe est la personne ?</label>
+                <select id="${idClasse}" required>
+                    ${optionsClasses}
+                </select>
+
+                <label>2. Qui est-ce ?</label>
+                <select id="${idEleve}" required disabled>
+                    <option value="">-- Sélectionner d'abord la classe --</option>
+                </select>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+
+        // Ajouter la logique pour ce bloc spécifique
+        const selectClasse = document.getElementById(idClasse);
+        const selectEleve = document.getElementById(idEleve);
+
+        selectClasse.addEventListener("change", function() {
+            const classeChoisie = this.value;
+            selectEleve.innerHTML = '<option value="">-- Choisir un élève --</option>';
+            
+            if (classeChoisie) {
+                selectEleve.disabled = false;
+                annuaire[classeChoisie].forEach(eleve => {
+                    selectEleve.insertAdjacentHTML('beforeend', `<option value="${eleve} (${classeChoisie})">${eleve}</option>`);
+                });
+            } else {
+                selectEleve.disabled = true;
+            }
+        });
+    });
+
+    // --- ENVOI DES DONNÉES VERS GOOGLE SHEETS ---
+    document.getElementById("voteForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        
+        // Cacher le bouton, afficher le chargement
+        document.getElementById("submitBtn").style.display = "none";
+        document.getElementById("loader").style.display = "block";
+
+        // Récolter les réponses
+        let payload = {
+            votant: document.getElementById("votantName").value,
+            prof: document.getElementById("profMarquant").value,
+            votes: {}
+        };
+
+        categories.forEach((cat, index) => {
+            payload.votes[cat] = document.getElementById(`eleve_${index}`).value;
+        });
+
+        // REMPLACE CETTE URL PAR CELLE OBTENUE À L'ÉTAPE 1 DANS GOOGLE SCRIPT !!!
+        const GOOGLE_SCRIPT_URL = "URL_DE_TON_SCRIPT_GOOGLE_ICI";
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Évite les erreurs de sécurité du navigateur
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).then(() => {
+            // Sauvegarder dans le navigateur que la personne a voté
+            localStorage.setItem('aVoteDiplomes', 'oui');
+            
+            // Afficher le message de succès
+            document.getElementById('main-container').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+            window.scrollTo(0, 0);
+        }).catch(err => {https://script.google.com/macros/s/AKfycbwCjdw8NnaA-QvFR_QQRG8bjyCVEXN8sygjR9En_bAq6fcYZnPy8uMuvzBjPT_BBkoy/exec
+            alert("Une erreur est survenue lors de l'envoi. Réessaie !");
+            document.getElementById("submitBtn").style.display = "block";
+            document.getElementById("loader").style.display = "none";
+        });
+    });
+</script>
+
+</body>
+</html>
